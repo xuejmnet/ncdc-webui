@@ -62,7 +62,6 @@ async function bootstrap() {
   // https://next.router.vuejs.org/api/#isready
   // await router.isReady();
 
-  app.use(Antd);
   app.mount('#app');
 }
 
