@@ -72,6 +72,7 @@ const [registerTable, { reload }] = useTable({
 function handleCreate() {
   openModal(true, {
     isUpdate: false,
+    logicDatabaseId:searchInfo.logicDatabaseId,
     logicDatabaseName:searchInfo.logicDatabaseName
   });
 }
@@ -80,6 +81,8 @@ function handleEdit(record: Recordable) {
   openModal(true, {
     record,
     isUpdate: true,
+    logicDatabaseId:searchInfo.logicDatabaseId,
+    logicDatabaseName:searchInfo.logicDatabaseName
   });
 }
 
@@ -98,8 +101,9 @@ async function handleDelete(record: Recordable) {
 function handleSuccess() {
   reload();
 }
-function handleSelect(logicDatabaseName='') {
-  searchInfo.logicDatabaseName=logicDatabaseName;
+function handleSelect(database:any) {
+  searchInfo.logicDatabaseId=database.id;
+  searchInfo.logicDatabaseName=database.databaseName;
   
   reload();
 }

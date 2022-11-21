@@ -48,13 +48,14 @@ export type LogicDatabasePageResultModel = BasicFetchResult<LogicDatabasePageMod
 
 export type ActualDatabaseQueryParams = {
   databaseName: string;
+  logicDatabaseId:string;
 };
 
 export type ActualDatabaseQueryPageParams = BasicPageParams & ActualDatabaseQueryParams;
 
 export interface ActualDatabasePageModel {
   id: string;
-  logicDatabaseName: string;
+  logicDatabaseId: string;
   dataSourceName:string;
   connectionString: string;
   isDefault: boolean;
@@ -150,3 +151,21 @@ export interface LogicTableActualTablePageModel {
   dataSource: string;
 }
 export type LogicTableActualTablePageResultModel = BasicFetchResult<LogicTableActualTablePageModel>;
+
+
+export interface ActualTableCreateModel {
+  tableName:string;
+  logicDatabaseId: string;
+  logicTableId: string;
+  dataSourceId: string;
+}
+
+
+export type ActualDataSourceAllParams = {
+  logicDatabaseId: string;
+};
+
+export interface ActualDataSourceListModel {
+  id: string;
+  dataSourceName: string;
+}

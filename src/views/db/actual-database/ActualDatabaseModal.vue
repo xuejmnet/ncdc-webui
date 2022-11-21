@@ -12,7 +12,7 @@ import { createActualDatabase, udpateActualDatabase } from '/@/api/db/db'
 const emit = defineEmits(["success","register"])
 
 const isUpdate = ref(true);
-    const id = ref('');
+    const params = ref<Recordable>({});
 
 
     const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
@@ -26,14 +26,19 @@ const isUpdate = ref(true);
       resetFields();
       setModalProps({ confirmLoading: false });
       isUpdate.value = !!data?.isUpdate;
+
+      params.value.logicDatabaseId=data.logicDatabaseId;
+      params.value.logicDatabaseName=data.logicDatabaseName;
+
       if (unref(isUpdate)) {
-        id.value = data.record.id
+      params.value.id=data.record.id;
         setFieldsValue({
           ...data.record,
+          logicDatabaseName:data.logicDatabaseName
         });
       }else{
         setFieldsValue({
-          logicDatabaseName:data?.logicDatabaseName
+          logicDatabaseName:data.logicDatabaseName
         });
       }
     });
@@ -43,11 +48,11 @@ const isUpdate = ref(true);
     async function handleSubmit() {
       try {
         const values = await validate();
-        
+        values.logicDatabaseId=params.value.logicDatabaseId;
         setModalProps({ confirmLoading: true });
        
         if (unref(isUpdate)) {
-          values.id = id.value;
+          values.id = params.value.id;
           await udpateActualDatabase(values)
         } else {
           await createActualDatabase(values);

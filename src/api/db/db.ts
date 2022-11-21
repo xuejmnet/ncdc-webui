@@ -3,11 +3,15 @@ import {
   ActualDatabasePageResultModel,
   ActualDatabaseQueryPageParams,
   ActualDatabasUpdateModel,
+  ActualDataSourceAllParams,
+  ActualDataSourceListModel,
+  ActualTableCreateModel,
   LogicDatabasCreateModel,
   LogicDatabasePageResultModel,
   LogicDatabaseQueryPageParams,
   LogicDatabasesModel,
   LogicDatabasUpdateModel,
+  LogicTableActualTablePageModel,
   LogicTableActualTablePageResultModel,
   LogicTableActualTableQueryPageParams,
   LogicTableCreateModel,
@@ -27,11 +31,14 @@ enum Api {
   ActualDatabaseCreate = '/api/actual-database/create',
   ActualDatabaseUpdate = '/api/actual-database/update',
   ActualDatabaseDelete = '/api/actual-database/delete',
+  ActualDatabaseAll = '/api/actual-database/all',
   LogicTablePage = '/api/logic-table/page',
   LogicTableCreate = '/api/logic-table/create',
   LogicTableUpdate = '/api/logic-table/update',
   LogicTableDelete = '/api/logic-table/delete',
+  ActualTableCreate = '/api/logic-table/actual-table-create',
   LogicTableActualTablePage = '/api/logic-table/actual-table-page',
+  ActualTableDelete = '/api/logic-table/actual-table-delete',
 }
 
 export const getLogicDatabasePage = (params?: LogicDatabaseQueryPageParams) =>{
@@ -49,6 +56,7 @@ export const udpateLogicDatabase = (params?: LogicDatabasUpdateModel) =>{
 export const deleteLogicDatabase = (id: string) =>{
   return defHttp.delete<Object>({ url: `${Api.LogicDatabaseDelete}/${id}`});
 }
+
 export const logicDatabases = () =>{
   return defHttp.get<LogicDatabasesModel>({ url: Api.AllLogicDatabase});
 }
@@ -91,4 +99,15 @@ export const getLogicTableActualTablePage = (params?: LogicTableActualTableQuery
   return defHttp.get<LogicTableActualTablePageResultModel>({ url: Api.LogicTableActualTablePage, params });
 }
 
+
+export const createActualTable = (params?: ActualTableCreateModel) =>{
+  return defHttp.post<Object>({ url: Api.ActualTableCreate, params });
+}
+
+export const getActualDataSourceAll = (params?: ActualDataSourceAllParams) =>{
+  return defHttp.get<ActualDataSourceListModel[]>({ url: Api.ActualDatabaseAll, params });
+}
+export const deleteActualTable = (id: string) =>{
+  return defHttp.delete<Object>({ url: `${Api.ActualTableDelete}/${id}`});
+}
 

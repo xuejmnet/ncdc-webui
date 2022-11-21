@@ -1,6 +1,9 @@
 <template>
   <div>
-    <BasicTable @register="registerTable" class="w-99/100 xl:w-99/100" :searchInfo="searchInfo">
+    <BasicTable @register="registerTable" class="w-4/4 xl:w-5/5" :searchInfo="searchInfo">
+      <template #toolbar>
+        <a-button type="primary" @click="handleCreate"> 新增实际表 </a-button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="[
@@ -17,14 +20,17 @@
         </template>
       </template>
     </BasicTable>
+    <ActualTableModal @register="registerModal"  @success="handleSuccess"/>
   </div>
 </template>
 <script lang="ts" setup>
 import { reactive,defineProps,onMounted } from 'vue';
 import { BasicTable, useTable, TableAction } from '/@/components/Table';
-import { getLogicTableActualTablePage, deleteLogicTable } from '/@/api/db/db';
+import { getLogicTableActualTablePage, deleteActualTable } from '/@/api/db/db';
+import ActualTableModal from './ActualTableModal.vue';
 
 import { useLoading } from '/@/components/Loading';
+import { useModal } from '/@/components/Modal';
 
 import { columns } from './actual-table.data';
 const [openFullLoading, closeFullLoading] = useLoading({
@@ -36,12 +42,13 @@ interface Props {
 }
 
 const props=defineProps<Props>();
+console.log(props.record);
 
 const searchInfo = reactive<Recordable>({});
-searchInfo.logicDatabaseName=props.record.logicDatabaseName;
-searchInfo.logicTableName=props.record.tableName;
-console.log(searchInfo);
+searchInfo.logicDatabaseId=props.record.logicDatabaseId;
+searchInfo.logicTableId=props.record.id;
 
+const [registerModal, { openModal }] = useModal();
 const [registerTable, { reload }] = useTable({
   api: getLogicTableActualTablePage,
   columns,
@@ -58,17 +65,29 @@ const [registerTable, { reload }] = useTable({
   },
 });
 
+function handleCreate() {
+  openModal(true, {
+    logicDatabaseId:props.record.logicDatabaseId,
+    logicDatabaseName:props.record.logicDatabaseName,
+    logicTableId:props.record.id,
+    logicTableName:props.record.tableName
+  });
+}
 
 async function handleDelete(record: Recordable) {
 
   openFullLoading();
   try {
-    await deleteLogicTable(record.id)
+    await deleteActualTable(record.id)
     reload();
   } finally {
     closeFullLoading();
   }
 
+}
+
+function handleSuccess() {
+  reload();
 }
 onMounted(() => {
   reload();

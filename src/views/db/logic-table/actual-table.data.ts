@@ -20,7 +20,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '数据源',
-    dataIndex: 'dataSource',
+    dataIndex: 'dataSourceName',
     width: 80,
     ellipsis: true
   },
@@ -55,9 +55,9 @@ export const formSchema: FormSchema[] = [
     required:true
   },
   {
-    field: 'dataSource',
+    field: 'dataSourceId',
     label: '数据源',
-    component: 'Input',
+    component: 'Select',
     required:true
   }
 ];

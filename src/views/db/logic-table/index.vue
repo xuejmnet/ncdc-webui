@@ -6,15 +6,13 @@
         <a-button type="primary" @click="handleCreate"> 新增逻辑表 </a-button>
       </template>
       <template #expandedRowRender="{ record }">
-       <ActualTableView v-if="record.expanded" :record="record"></ActualTableView>
+       <div class="expanded-container">
+        <ActualTableView v-if="record.expanded" :record="record"></ActualTableView>
+       </div>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="[
-            {
-              icon: 'ant-design:plus-outlined',
-              onClick: handleEdit.bind(null, record)
-            },
             {
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
@@ -81,22 +79,23 @@ const [registerTable, { reload }] = useTable({
 function handleCreate() {
   openModal(true, {
     isUpdate: false,
-    logicDatabaseName: searchInfo.logicDatabaseName
+    logicDatabaseId:searchInfo.logicDatabaseId,
+    logicDatabaseName:searchInfo.logicDatabaseName
   });
 }
 
 function handleExpand(expanded: boolean, record: Recordable) {
+  record.logicDatabaseName=searchInfo.logicDatabaseName
   record.expanded=expanded;
-  
-
 }
 function handleEdit(record: Recordable) {
   openModal(true, {
     record,
     isUpdate: true,
+    logicDatabaseId:searchInfo.logicDatabaseId,
+    logicDatabaseName:searchInfo.logicDatabaseName
   });
 }
-
 async function handleDelete(record: Recordable) {
 
   openFullLoading();
@@ -112,10 +111,16 @@ async function handleDelete(record: Recordable) {
 function handleSuccess() {
   reload();
 }
-function handleSelect(logicDatabaseName = '') {
-  searchInfo.logicDatabaseName = logicDatabaseName;
+function handleSelect(database:any) {
+  searchInfo.logicDatabaseId=database.id;
+  searchInfo.logicDatabaseName=database.databaseName;
 
   reload();
 }
 
 </script>
+<style lang="less" scoped>
+/deep/ .ant-table.ant-table-middle .ant-table-tbody .ant-table-wrapper:only-child .ant-table{
+margin: 0 !important;
+}
+</style>

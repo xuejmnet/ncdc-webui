@@ -26,7 +26,9 @@ async function fetch() {
 function handleSelect(keys) {
   if (keys.length > 0) {
     let item = treeData.value.find(o => o.id == keys[0]);
-    emit('select', (item as any).databaseName);
+    let database=(item as any)
+    
+    emit('select', {id:database.id,databaseName:database.databaseName});
   }
 }
 

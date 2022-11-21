@@ -12,7 +12,7 @@ import { createLogicTable, udpateLogicTable } from '/@/api/db/db'
 const emit = defineEmits(["success", "register"])
 
 const isUpdate = ref(true);
-const id = ref('');
+const params = ref<Recordable>({});
 
 
 const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
@@ -26,10 +26,13 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
   resetFields();
   setModalProps({ confirmLoading: false });
   isUpdate.value = !!data?.isUpdate;
+  params.value.logicDatabaseId = data.logicDatabaseId;
+  params.value.logicDatabaseName = data.logicDatabaseName;
   if (unref(isUpdate)) {
-    id.value = data.record.id
+    params.value.id = data.record.id;
     setFieldsValue({
       ...data.record,
+      logicDatabaseName: data.logicDatabaseName
     });
 
   } else {
@@ -37,10 +40,10 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
       logicDatabaseName: data?.logicDatabaseName
     });
   }
-    updateSchema({
-      field: 'tableName',
-      componentProps: { disabled: unref(isUpdate) }
-    });
+  updateSchema({
+    field: 'tableName',
+    componentProps: { disabled: unref(isUpdate) }
+  });
 });
 
 const getTitle = computed(() => (!unref(isUpdate) ? '新增实际数据库' : '编辑实际数据库'));
@@ -48,11 +51,12 @@ const getTitle = computed(() => (!unref(isUpdate) ? '新增实际数据库' : '�
 async function handleSubmit() {
   try {
     const values = await validate();
+    values.logicDatabaseId = params.value.logicDatabaseId;
 
     setModalProps({ confirmLoading: true });
 
     if (unref(isUpdate)) {
-      values.id = id.value;
+      values.id = params.value.id;
       await udpateLogicTable(values)
     } else {
       await createLogicTable(values);
