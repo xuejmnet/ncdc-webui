@@ -39,6 +39,15 @@ const db: AppRouteModule = {
         ignoreKeepAlive: false,
       },
       component: () => import('/@/views/db/logic-table/index.vue'),
+    },
+    {
+      path: 'auth-user',
+      name: 'AuthUserManagement',
+      meta: {
+        title: '登录用户管理',
+        ignoreKeepAlive: false,
+      },
+      component: () => import('/@/views/db/auth-user/index.vue'),
     }
   ],
 };

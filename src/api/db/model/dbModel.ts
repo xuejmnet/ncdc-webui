@@ -1,6 +1,61 @@
 import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
 
 
+export type AuthUserDatabasesSaveParams = {
+  id: string;
+  checkedDatabases: Array<string>;
+};
+export type AuthUserDatabasesQueryParams = {
+  id: string;
+};
+export type AuthUserDatabasesModel = {
+  checkedDatabases: Array<string>;
+  allDatabases: Array<AuthUserDatabasesAllModel>;
+};
+
+export type AuthUserDatabasesAllModel = {
+  id: string;
+  databaseName: string;
+};
+
+
+export type AuthUserQueryParams = {
+  userName?: string;
+};
+
+export type AuthUserQueryPageParams = BasicPageParams & AuthUserQueryParams;
+
+
+export interface AuthUserPageModel {
+  id: string;
+  userName: string;
+  password: string;
+  hostName: string;
+  isEnable: boolean;
+  createTime:string;
+  updateTime:string;
+}
+
+export type AuthUserPageResultModel = BasicFetchResult<AuthUserPageModel>;
+
+
+
+export interface AuthUserCreateModel {
+  userName: string;
+  password: string;
+  hostName: string;
+  isEnable: boolean;
+}
+
+export interface AuthUserUpdateModel {
+  id: string;
+  userName: string;
+  password: string;
+  hostName: string;
+  isEnable: boolean;
+}
+
+
 export type DatabaseQueryParams = {
   databaseName?: string;
 };

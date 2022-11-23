@@ -6,12 +6,18 @@ import {
   ActualDataSourceAllParams,
   ActualDataSourceListModel,
   ActualTableCreateModel,
+  AuthUserCreateModel,
+  AuthUserDatabasesModel,
+  AuthUserDatabasesQueryParams,
+  AuthUserDatabasesSaveParams,
+  AuthUserPageResultModel,
+  AuthUserQueryPageParams,
+  AuthUserUpdateModel,
   LogicDatabasCreateModel,
   LogicDatabasePageResultModel,
   LogicDatabaseQueryPageParams,
   LogicDatabasesModel,
   LogicDatabasUpdateModel,
-  LogicTableActualTablePageModel,
   LogicTableActualTablePageResultModel,
   LogicTableActualTableQueryPageParams,
   LogicTableCreateModel,
@@ -39,6 +45,32 @@ enum Api {
   ActualTableCreate = '/api/logic-table/actual-table-create',
   LogicTableActualTablePage = '/api/logic-table/actual-table-page',
   ActualTableDelete = '/api/logic-table/actual-table-delete',
+  AuthUserPage = '/api/auth-user/page',
+  AuthUserCreate = '/api/auth-user/create',
+  AuthUserUpdate = '/api/auth-user/update',
+  AuthUserDelete = '/api/auth-user/delete',
+  AuthUserDatabases = '/api/auth-user/user-databases',
+  AuthUserDatabasesSave = '/api/auth-user/user-databases-save',
+}
+export const getAuthUserDatabaseSave = (params?: AuthUserDatabasesSaveParams) =>{
+  return defHttp.post<Object>({ url: Api.AuthUserDatabasesSave, params });
+}
+export const getAuthUserDatabases = (params?: AuthUserDatabasesQueryParams) =>{
+  return defHttp.get<AuthUserDatabasesModel>({ url: Api.AuthUserDatabases, params });
+}
+export const getAuthPage = (params?: AuthUserQueryPageParams) =>{
+  return defHttp.get<AuthUserPageResultModel>({ url: Api.AuthUserPage, params });
+}
+
+export const createAuthUser = (params?: AuthUserCreateModel) =>{
+  return defHttp.post<Object>({ url: Api.AuthUserCreate, params });
+}
+export const updateAuthUser = (params?: AuthUserUpdateModel) =>{
+  return defHttp.post<Object>({ url: Api.AuthUserUpdate, params });
+}
+
+export const deleteAuthUser = (id: string) =>{
+  return defHttp.delete<Object>({ url: `${Api.AuthUserDelete}/${id}`});
 }
 
 export const getLogicDatabasePage = (params?: LogicDatabaseQueryPageParams) =>{

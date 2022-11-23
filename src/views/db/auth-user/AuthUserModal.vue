@@ -7,15 +7,16 @@
 import { ref, computed, unref, defineEmits } from 'vue';
 import { BasicModal, useModalInner } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
-import { formSchema } from './actual-database.data';
-import { createActualDatabase, udpateActualDatabase } from '/@/api/db/db'
+import { formSchema } from './auth-user.data';
+import { createAuthUser, updateAuthUser } from '/@/api/db/db'
 const emit = defineEmits(["success", "register"])
 
+
 const isUpdate = ref(true);
-const params = ref<Recordable>({});
+const id = ref('');
 
 
-const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
+const [registerForm, { resetFields, setFieldsValue, validate,updateSchema }] = useForm({
   labelWidth: 100,
   baseColProps: { span: 24 },
   schemas: formSchema,
@@ -26,40 +27,33 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
   resetFields();
   setModalProps({ confirmLoading: false });
   isUpdate.value = !!data?.isUpdate;
-
-  params.value.logicDatabaseId = data.logicDatabaseId;
-  params.value.logicDatabaseName = data.logicDatabaseName;
-
   if (unref(isUpdate)) {
-    params.value.id = data.record.id;
+    id.value = data.record.id
     setFieldsValue({
       ...data.record,
-      logicDatabaseName: data.logicDatabaseName
-    });
-    updateSchema({
-      field: 'isDefault',
-      componentProps: { disabled: unref(isUpdate) }
-    })
-  } else {
-    setFieldsValue({
-      logicDatabaseName: data.logicDatabaseName
     });
   }
+
+  updateSchema({
+      field:'userName',
+      componentProps:{
+        disabled:unref(isUpdate)
+      }
+    })
 });
 
-const getTitle = computed(() => (!unref(isUpdate) ? '新增实际数据库' : '编辑实际数据库'));
+const getTitle = computed(() => (!unref(isUpdate) ? '新增用户' : '编辑用户'));
 
 async function handleSubmit() {
   try {
     const values = await validate();
-    values.logicDatabaseId = params.value.logicDatabaseId;
     setModalProps({ confirmLoading: true });
-
+    console.log(id.value);
     if (unref(isUpdate)) {
-      values.id = params.value.id;
-      await udpateActualDatabase(values)
+      values.id = id.value;
+      await updateAuthUser(values)
     } else {
-      await createActualDatabase(values);
+      await createAuthUser(values);
     }
     closeModal();
     emit('success');
